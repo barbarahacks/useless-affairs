@@ -9,13 +9,14 @@ what we are doing on department of useless affairs (stupid ideas hackathon, otta
 - [x] departments picked from the request (#4)
 - [x] random judging, and the final council can refuse (#5)
 - [x] office sounds (#11)
-- [x] ottawa news ticker (#17)
-- [x] voices read the verdicts: 4 languages, an alien, clear english, a singing council (#18)
-- [x] fines (#20)
 
 ## next up
 
-- [ ] follow-up question (#25)
+- [ ] stupid features, one at a time:
+  - [x] ottawa news ticker (#17)
+  - [x] voices read the verdicts: 4 languages, an alien, clear english, a singing council (#18)
+  - [x] fines (#20)
+  - [ ] follow-up question (#25)
 - [ ] deploy (github pages or netlify) and make the repo public for judging
 - [ ] mobile check in a real browser
 
