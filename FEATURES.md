@@ -23,7 +23,7 @@ what we are doing on department of useless affairs (stupid ideas hackathon, otta
 ## next up
 
 - [ ] stupid features, one at a time:
-  - [ ] ottawa news ticker (#17)
+  - [x] ottawa news ticker (#17)
   - [ ] monotone voice reads the verdicts (#18)
   - [ ] paper jam (#19)
   - [ ] fines (#20)
