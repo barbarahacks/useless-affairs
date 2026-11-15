@@ -4,6 +4,7 @@ import { Scene } from './scene.ts';
 import { sound } from './sound.ts';
 import { initTicker, reportCase } from './ticker.ts';
 import { fine, finesOwed, initFines, money, settleFines } from './fines.ts';
+import { askForAnswer, insufficient, question } from './followup.ts';
 import { EXAMPLES, buildCase } from './departments.ts';
 import type { Case, Outcome } from './departments.ts';
 
@@ -140,10 +141,21 @@ async function run(request: string): Promise<void> {
   await say('reception', `request received: "${request.trim()}". case ${no} opened. assigned to ${c.depts.length} relevant departments.`);
   await sleep(400);
 
+  // one department at desks 2-6 stops to ask a follow-up question
+  const askAt = FAST ? -1 : 1 + Math.floor(Math.random() * 5);
+
   for (let i = 0; i < c.depts.length; i++) {
-    const v = c.verdicts[i];
     setStep(i, 'review');
     await scene.moveTo(i);
+    if (i === askAt) {
+      const q = question(c.action);
+      await Promise.all([say(c.depts[i].name, q), sound.speak(q, i)]);
+      const answer = await askForAnswer($('letter'));
+      if (answer?.includes('?')) fine('answering a question with a question', 3.5);
+      // every answer is insufficient
+      c.verdicts[i] = { outcome: 'rejected', reason: insufficient(answer) };
+    }
+    const v = c.verdicts[i];
     // read the verdict first (typed and spoken), then stamp it
     const line = `${v.outcome}. ${v.reason}`;
     const lang = sound.languageOf(i);
