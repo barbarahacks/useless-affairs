@@ -7,7 +7,7 @@ a pixel-art bureaucracy simulator for the stupid ideas hackathon (ottawa). submi
 - **request input:** type anything, or leave it blank to use the default, "can i blink?".
 - **example buttons:** one-click requests such as "can i eat another chip?" and "am i legally allowed to go to bed?".
 - **request cleanup:** phrases like "can i", "may i", "am i allowed to" and "i want to" are stripped, so the action reads naturally on the certificate. an empty request becomes "do absolutely nothing".
-- **departments picked from the request:** each request goes to 5 to 7 departments.
+- **departments picked from the request:** each request goes to 7 departments.
   - up to 3 topic departments, matched by keywords in the request. topics: school and homework, food, sleep, the body (blinking, breathing), moving around, work, money, feelings, phones and screens, drinks, talking, and not doing things.
   - examples: "can i not submit my homework?" goes to the ministry of education-adjacent matters, the office of the dog that ate it, and the department of not doing things. snack oversight only shows up for food.
   - 1 department invented from the request's main word, e.g. "standing committee on homework" or "office of chip affairs".

@@ -158,7 +158,7 @@ export function mainThing(action: string): string | null {
 export function buildCase(request: string): Case {
   const action = cleanAction(request);
   const thing = mainThing(action) ?? 'nothing';
-  const total = 5 + Math.floor(Math.random() * 3); // 5-7 seats, including the final council
+  const total = 7; // 6 departments plus the final council
 
   const seats: Dept[] = [];
   const add = (d: Dept): void => {
