@@ -82,6 +82,7 @@
                 <input id="req" type="text" maxlength="80" placeholder="can i blink?" />
                 <button id="go" type="submit">submit request</button>
               </div>
+              <p id="req-hint" class="hint" role="status" hidden></p>
               <p class="fine">by submitting, you agree to be rejected. fields marked * are mandatory. there are no fields marked *.</p>
             </form>
             <div class="freq">
@@ -98,6 +99,7 @@
           </div>
           <div class="progress"><div id="progress-bar"></div></div>
           <p class="fines-owed">fines owed: <b id="fines-total">$0.00</b></p>
+          <p class="routed">routed by: <b id="routed-by">nobody yet</b></p>
           <ol id="steps"></ol>
         </aside>
       </div>

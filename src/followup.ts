@@ -1,6 +1,7 @@
 // a department stops to ask a follow-up question. every answer is insufficient.
 // dummy questions from templates for now; claude can ask real ones later.
 import { mainThing } from './departments.ts';
+import { clearHintOnInput, nudgeIfEmpty } from './nudge.ts';
 
 export const ANSWER_SECONDS = 10;
 
@@ -43,10 +44,12 @@ export function askForAnswer(panel: HTMLElement): Promise<string | null> {
   const form = document.createElement('form');
   form.className = 'answer';
   form.autocomplete = 'off';
-  form.innerHTML = `<label class="lbl" for="answer">your answer</label><div class="answer-row"><input id="answer" type="text" maxlength="80" placeholder="type your answer" /><button type="submit">answer</button><span class="countdown" aria-live="off">${ANSWER_SECONDS}s</span></div>`;
+  form.innerHTML = `<label class="lbl" for="answer">your answer</label><div class="answer-row"><input id="answer" type="text" maxlength="80" placeholder="type your answer" /><button type="submit">answer</button><span class="countdown" aria-live="off">${ANSWER_SECONDS}s</span></div><p class="hint" role="status" hidden></p>`;
   panel.appendChild(form);
   const input = form.querySelector('input')!;
   const countdown = form.querySelector('.countdown')!;
+  const hint = form.querySelector<HTMLElement>('.hint')!;
+  clearHintOnInput(input, hint);
   input.focus({ preventScroll: true });
 
   return new Promise((resolve) => {
@@ -63,6 +66,8 @@ export function askForAnswer(panel: HTMLElement): Promise<string | null> {
     }, 1000);
     form.addEventListener('submit', (e) => {
       e.preventDefault();
+      // an empty answer is not submitted; the countdown keeps going
+      if (nudgeIfEmpty(input, hint)) return;
       finish(input.value);
     });
   });

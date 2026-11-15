@@ -122,6 +122,16 @@ h1 { font: 600 clamp(26px, 4vw, 38px)/1.15 var(--serif); color: var(--navy); mar
 .answer button { padding: 10px 14px; }
 .countdown { font: 700 14px/1 var(--mono); color: var(--red); min-width: 3ch; text-align: right; }
 
+/* empty field: told off and shaken */
+.hint { margin: 8px 0 0; font: 600 13px/1.3 var(--mono); color: var(--red); }
+.shake { animation: shake 0.35s ease; }
+@keyframes shake {
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
 /* form */
 #form { padding: 18px 18px 4px; }
 #form label { display: block; font-weight: 600; font-size: 15px; color: var(--navy); margin-bottom: 8px; }
@@ -172,6 +182,8 @@ button.secondary:hover { background: var(--manila-2); }
 /* fines */
 .fines-owed { margin: 0 16px 4px; font: 500 12px/1.4 var(--mono); color: var(--muted); }
 .fines-owed b { color: var(--red); }
+.routed { margin: 0 16px 6px; font: 500 12px/1.4 var(--mono); color: var(--muted); }
+.routed b { color: var(--navy); }
 .fines { position: fixed; right: 16px; bottom: 16px; z-index: 20; display: grid; gap: 10px; width: min(280px, calc(100vw - 32px)); pointer-events: none; }
 .fine-slip { background: var(--paper); border: 2px solid var(--red); border-left-width: 8px; box-shadow: 0 8px 24px rgba(31, 36, 48, 0.18); padding: 10px 12px; display: grid; gap: 3px; transform: rotate(-1.5deg); animation: slip-in 0.35s cubic-bezier(0.2, 1.4, 0.5, 1) both; transition: opacity 0.4s, transform 0.4s; }
 .fine-slip .lbl { color: var(--red); font-size: 9.5px; }
@@ -219,8 +231,8 @@ button.secondary:hover { background: var(--manila-2); }
 .foot { margin-top: 72px; border-top: 1px solid var(--line); background: var(--paper); font-size: 12.5px; color: var(--muted); }
 .foot .wrap { display: flex; flex-wrap: wrap; gap: 6px 18px; padding-top: 16px; padding-bottom: 16px; }
 
-/* stickers: their own notice-board section at the bottom, with a fixed width of its own (not tied to .wrap) */
-.stickers { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 0 16px 44px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 28px 30px; }
+/* stickers: their own notice-board section at the bottom, sized by its stickers (not tied to .wrap) */
+.stickers { position: relative; z-index: 1; margin: 0 auto; padding: 0 16px 44px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 28px 30px; }
 .stickers::before { content: 'department notice board · please do not add stickers'; flex-basis: 100%; text-align: center; font: 600 10.5px/1 var(--mono); letter-spacing: 0.12em; color: var(--muted); padding-top: 24px; border-top: 1px dashed #cfc6ae; }
 .sticker { flex: none; zoom: 0.8; transform: rotate(var(--r, 0deg)); filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.18)) drop-shadow(0 5px 7px rgba(0, 0, 0, 0.08)); line-height: 1.15; user-select: none; }
 .sticker b, .sticker small, .sticker .lbl { display: block; }
@@ -256,12 +268,12 @@ button.secondary:hover { background: var(--manila-2); }
 .s-ticket .lbl { color: #7a2620; font-size: 9px; }
 .s-ticket b { font: 700 27px/1.1 var(--mono); }
 
-/* desktop notice board: 6 stickers on top, 4 below */
+/* desktop notice board: 6 stickers on top, 4 below. each row is centred and only as wide as its
+   stickers; an invisible full-width break (::after, ordered between them) splits the rows. */
 @media (min-width: 900px) {
-  .stickers { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); justify-items: center; gap: 30px 16px; }
-  .stickers::before { grid-column: 1 / -1; }
-  .sticker { grid-column: span 2; }
-  .sticker:nth-child(n + 7) { grid-column: span 3; }
+  .sticker { order: 1; }
+  .sticker:nth-child(n + 7) { order: 3; }
+  .stickers::after { content: ''; order: 2; flex-basis: 100%; height: 0; margin-bottom: -28px; }
 }
 
 @media (max-width: 880px) {

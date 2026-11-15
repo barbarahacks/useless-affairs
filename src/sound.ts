@@ -61,12 +61,12 @@ function hiss(at: number, dur: number, vol: number, freq: number, filter: Biquad
 
 // silly voices from the browser's speech synthesis
 const synth: SpeechSynthesis | undefined = 'speechSynthesis' in window ? window.speechSynthesis : undefined;
-// the cast for every case: 4 languages, 1 alien and 1 clear english at desks 1-6 (shuffled),
-// and the supreme council at desk 7 sings in english
+// the cast for every case, desks 1-6 shuffled: french, mandarin, russian and spanish voices, an alien and a clear
+// english voice. everyone reads the english line, so the other voices give it their accent.
+// the supreme council at desk 7 sings in english.
 export type Lang = 'en' | 'fr' | 'zh' | 'ru' | 'es';
 type Role = Lang | 'alien';
 const ROLES: Role[] = ['zh', 'fr', 'ru', 'es', 'alien', 'en'];
-const LANG_NAME: Record<Lang, string> = { en: 'english', fr: 'french', zh: 'mandarin', ru: 'russian', es: 'spanish' };
 // clearest voices first; names as macos and chrome report them
 const PREFER: Record<Role, string[]> = {
   en: ['Samantha', 'Daniel', 'Karen', 'Moira', 'Alex'],
@@ -76,26 +76,6 @@ const PREFER: Record<Role, string[]> = {
   es: ['Mónica', 'Paulina'],
   alien: ['Zarvox', 'Trinoids'],
 };
-// stock lines for the departments that do not speak english (subtitled on screen)
-const STOCK: Record<Exclude<Lang, 'en'>, { approved: string[]; rejected: string[] }> = {
-  fr: {
-    approved: ['approuvé. félicitations, je suppose.', 'approuvé. ne le dites à personne.'],
-    rejected: ['rejeté. veuillez remplir le formulaire en trois exemplaires.', 'refusé. revenez dans six à huit ans.'],
-  },
-  zh: {
-    approved: ['批准。恭喜你，大概吧。', '批准。请不要告诉别人。'],
-    rejected: ['驳回。请一式三份重新填写表格。', '拒绝。请六到八年后再来。'],
-  },
-  ru: {
-    approved: ['одобрено. наверное, поздравляю.', 'одобрено. никому не говорите.'],
-    rejected: ['отклонено. заполните форму в трёх экземплярах.', 'отказано. приходите через шесть-восемь лет.'],
-  },
-  es: {
-    approved: ['aprobado. felicidades, supongo.', 'aprobado. no se lo diga a nadie.'],
-    rejected: ['rechazado. rellene el formulario por triplicado.', 'denegado. vuelva dentro de seis a ocho años.'],
-  },
-};
-
 let all: SpeechSynthesisVoice[] = [];
 function loadVoices(): void {
   all = synth?.getVoices() ?? [];
@@ -126,7 +106,7 @@ function voiceFor(role: Role): SpeechSynthesisVoice | undefined {
 }
 
 interface Persona {
-  lang: Lang; // what it says and how it is labelled
+  lang: Lang; // which voice (and so which accent) reads the line
   voice?: SpeechSynthesisVoice;
   pitch: number;
   wobble: number; // pitch swing between chunks; 0 reads the line in one go
@@ -162,19 +142,6 @@ export const sound = {
     });
     const news = named(granted ? 'Good News' : 'Bad News');
     cast.push(news ? { lang: 'en', voice: news, pitch: 1, wobble: 0, sings: true } : english);
-  },
-  // the language a seat speaks, for the subtitle label (null for english)
-  languageOf(seat: number): string | null {
-    if (cast[seat]?.alien) return 'alien';
-    const lang = cast[seat]?.lang ?? 'en';
-    return lang === 'en' ? null : LANG_NAME[lang];
-  },
-  // what a seat says out loud: english seats read the line, the others read a stock line in their language
-  spokenLine(seat: number, name: string, outcome: 'approved' | 'rejected', line: string): string {
-    const lang = cast[seat]?.lang ?? 'en';
-    if (lang === 'en') return `${name}. ${line}`;
-    const options = STOCK[lang][outcome];
-    return `${name}. ${options[Math.floor(Math.random() * options.length)]}`;
   },
   // reads text out loud (wobbly voices in short chunks that bounce in pitch); resolves when done, or on a timeout if the browser never says so
   speak(text: string, seat: number): Promise<void> {

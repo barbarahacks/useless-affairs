@@ -17,6 +17,14 @@ export interface Case {
   depts: Dept[];
   verdicts: Verdict[];
   granted: boolean; // what the final council decided
+  question: string | null; // claude's follow-up question, when claude made the case
+  source: 'claude' | 'dummy';
+}
+
+// what /api/case returns: claude's 6 departments and a follow-up question
+export interface AiCase {
+  departments: { name: string; reject: string; approve: string }[];
+  question: string;
 }
 
 // matches whole words, plus a trailing "s"
@@ -155,7 +163,8 @@ export function mainThing(action: string): string | null {
   return ws.at(-1) ?? null;
 }
 
-export function buildCase(request: string): Case {
+// departments come from claude when it answered, otherwise from the local dummy generator
+export function buildCase(request: string, ai: AiCase | null = null): Case {
   const action = cleanAction(request);
   const thing = mainThing(action) ?? 'nothing';
   const total = 7; // 6 departments plus the final council
@@ -164,10 +173,15 @@ export function buildCase(request: string): Case {
   const add = (d: Dept): void => {
     if (seats.length < total - 1 && !seats.some((s) => s.name === d.name)) seats.push(d);
   };
-  shuffle(TOPICS.filter((t) => t.re.test(action)).flatMap((t) => t.depts)).slice(0, 3).forEach(add);
-  add(thingDept());
+  if (ai) {
+    ai.departments.forEach((d) => add({ name: d.name, reject: [d.reject], approve: [d.approve] }));
+  } else {
+    shuffle(TOPICS.filter((t) => t.re.test(action)).flatMap((t) => t.depts)).slice(0, 3).forEach(add);
+    add(thingDept());
+  }
+  // only fills seats claude left empty (or the dummy's leftovers)
   shuffle(GENERIC).forEach(add);
-  const depts = [...shuffle(seats), FINAL];
+  const depts = [...(ai ? seats : shuffle(seats)), FINAL];
 
   // every department judges independently; at least one says no
   const outcomes: Outcome[] = seats.map(() => (Math.random() < 0.6 ? 'rejected' : 'approved'));
@@ -178,7 +192,7 @@ export function buildCase(request: string): Case {
   const fill = (s: string): string => s.replaceAll('{req}', action).replaceAll('{thing}', thing);
   const named = depts.map((d) => ({ ...d, name: fill(d.name) }));
   const verdicts = outcomes.map((outcome, i): Verdict => ({ outcome, reason: fill(pick(outcome === 'approved' ? depts[i].approve : depts[i].reject)) }));
-  return { action, depts: named, verdicts, granted };
+  return { action, depts: named, verdicts, granted, question: ai?.question ?? null, source: ai ? 'claude' : 'dummy' };
 }
 
 export const EXAMPLES = ['can i blink?', 'can i not submit my homework?', 'can i eat another chip?', 'am i legally allowed to go to bed?', 'can i quit my job?'];

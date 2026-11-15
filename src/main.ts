@@ -5,6 +5,8 @@ import { sound } from './sound.ts';
 import { initTicker, reportCase } from './ticker.ts';
 import { fine, finesOwed, initFines, money, settleFines } from './fines.ts';
 import { askForAnswer, insufficient, question } from './followup.ts';
+import { clearHintOnInput, nudgeIfEmpty } from './nudge.ts';
+import { fetchAiCase } from './ai.ts';
 import { EXAMPLES, buildCase } from './departments.ts';
 import type { Case, Outcome } from './departments.ts';
 
@@ -23,6 +25,7 @@ const go = $<HTMLButtonElement>('go');
 const cert = $('cert');
 const caseNo = $('case-no');
 const bar = $('progress-bar');
+const routedBy = $('routed-by');
 let busy = false;
 
 sound.unlockOnGesture();
@@ -129,16 +132,21 @@ async function run(request: string): Promise<void> {
   if (caps) fine(`${caps} capital letter${caps === 1 ? '' : 's'}. capital letters are not permitted on this website.`, caps);
   fastTyping = false;
   loitered = false;
-  const c = buildCase(request);
-  sound.newCast(c.depts.length, c.granted);
-  scene.reset(c.depts.length);
-  openCaseFile(c);
+  // ask claude for the departments now, so it works while reception is talking
+  const ai = fetchAiCase(request.trim());
+  scene.reset(7);
+  routedBy.textContent = 'routing...';
+  stepList.innerHTML = '<li class="empty">routing your request to the relevant departments...</li>';
 
   const no = `ua-${String(Math.floor(Math.random() * 1e6)).padStart(6, '0')}`;
   const date = new Date().toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' }).toLowerCase();
   caseNo.textContent = `case no. ${no}`;
 
-  await say('reception', `request received: "${request.trim()}". case ${no} opened. assigned to ${c.depts.length} relevant departments.`);
+  await say('reception', `request received: "${request.trim()}". case ${no} opened. routing to the relevant departments.`);
+  const c = buildCase(request, await ai);
+  sound.newCast(c.depts.length, c.granted);
+  openCaseFile(c);
+  routedBy.textContent = c.source === 'claude' ? 'claude (ai clerk)' : 'the backup clerk (offline)';
   await sleep(400);
 
   // one department at desks 2-6 stops to ask a follow-up question
@@ -148,7 +156,7 @@ async function run(request: string): Promise<void> {
     setStep(i, 'review');
     await scene.moveTo(i);
     if (i === askAt) {
-      const q = question(c.action);
+      const q = c.question ?? question(c.action);
       await Promise.all([say(c.depts[i].name, q), sound.speak(q, i)]);
       const answer = await askForAnswer($('letter'));
       if (answer?.includes('?')) fine('answering a question with a question', 3.5);
@@ -158,9 +166,7 @@ async function run(request: string): Promise<void> {
     const v = c.verdicts[i];
     // read the verdict first (typed and spoken), then stamp it
     const line = `${v.outcome}. ${v.reason}`;
-    const lang = sound.languageOf(i);
-    const from = lang ? `${c.depts[i].name} · in ${lang} (subtitled)` : c.depts[i].name;
-    await Promise.all([say(from, line), sound.speak(sound.spokenLine(i, c.depts[i].name, v.outcome, line), i)]);
+    await Promise.all([say(c.depts[i].name, line), sound.speak(`${c.depts[i].name}. ${line}`, i)]);
     await sleep(250);
     await scene.stamp(i, v.outcome, () => {
       sound.stamp(v.outcome === 'approved');
@@ -231,9 +237,12 @@ const watchLoitering = (): void => {
 window.addEventListener('pointermove', watchLoitering);
 watchLoitering();
 
+const reqHint = $('req-hint');
+clearHintOnInput(input, reqHint);
 form.addEventListener('submit', (e) => {
   e.preventDefault();
-  void run(input.value || input.placeholder);
+  if (busy || nudgeIfEmpty(input, reqHint)) return;
+  void run(input.value);
 });
 
 const mute = $('mute');
