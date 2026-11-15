@@ -21,7 +21,16 @@ what we are doing on department of useless affairs (stupid ideas hackathon, otta
 
 ## next up
 
-- [ ] pick which stupid features to build (see ideas)
+- [ ] stupid features, one at a time:
+  - [ ] ottawa news ticker (#17)
+  - [ ] monotone voice reads the verdicts (#18)
+  - [ ] paper jam (#19)
+  - [ ] fines (#20)
+  - [ ] peel the stickers (#21, needs fines)
+  - [ ] department merger (#22)
+  - [ ] clerk sneeze (#23)
+  - [ ] invented holidays (#24)
+  - [ ] follow-up question (#25)
 - [ ] deploy (github pages or netlify) and make the repo public for judging
 - [ ] mobile check in a real browser
 - [ ] slideshow via codex, using real app screenshots (see codex brief)
