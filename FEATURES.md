@@ -72,6 +72,21 @@ what we are doing on department of useless affairs (stupid ideas hackathon, otta
 - **2fa:** "we've sent a verification code to your fax machine."
 - **draft autosave:** "draft saved", then a second later "draft rejected".
 
+## submission post
+
+**title:** department of useless affairs 🏛️
+**tags:** the ai track tag + ottawa
+
+**made by:**
+barbara eguche @your-discord-handle
+
+**demo (video, link, or slide deck):**
+https://useless-affairs.netlify.app
+(code: https://github.com/barbarahacks/useless-affairs)
+
+**description:**
+a government portal where citizens apply for permission to do pointless things. claude assigns your request to 7 departments that review it under laws that run backwards, so finishing your homework is a crime and not finishing it gets you a state pension. clerks read their verdicts in a variety of accents, a department will ask you a follow-up question (every answer is insufficient), you get fined for using question marks, and the supreme council of final stamps sings the final decision. average processing time: 6–8 business years. satisfaction: 2.1 / 5.
+
 ## notes
 
 - demo is 60 seconds: features must land fast and not need explaining.
