@@ -164,7 +164,8 @@ export const sound = {
       };
       // singing is much slower than talking
       const timer = setTimeout(done, 2500 + text.length * (p.sings ? 220 : 80));
-      chunks.forEach((chunk, i) => {
+      // some mobile browsers drop speech that starts right after cancel(), so wait a moment
+      setTimeout(() => chunks.forEach((chunk, i) => {
         const u = new SpeechSynthesisUtterance(chunk);
         if (p.voice) u.voice = p.voice;
         u.lang = p.voice?.lang ?? 'en-US';
@@ -175,17 +176,28 @@ export const sound = {
           u.onerror = done;
         }
         synth.speak(u);
-      });
+      }), 60);
     });
   },
   stopSpeaking(): void {
     synth?.cancel();
   },
   // wake the audio context on the first click or key press
+  // phones only allow speech that starts inside a tap: speaking a silent line on the first tap unlocks it for the visit
   unlockOnGesture(): void {
     const wake = (): void => void audio();
     window.addEventListener('pointerdown', wake, { once: true });
     window.addEventListener('keydown', wake, { once: true });
+    let speechUnlocked = false;
+    const wakeSpeech = (): void => {
+      if (speechUnlocked || !synth) return;
+      speechUnlocked = true;
+      const u = new SpeechSynthesisUtterance(' ');
+      u.volume = 0;
+      synth.speak(u);
+      for (const type of ['click', 'touchend', 'keydown']) window.removeEventListener(type, wakeSpeech);
+    };
+    for (const type of ['click', 'touchend', 'keydown']) window.addEventListener(type, wakeSpeech);
   },
   // typewriter key
   key(): void {
