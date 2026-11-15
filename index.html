@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8F%9B%EF%B8%8F%3C/text%3E%3C/svg%3E" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>department of useless affairs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <h1>department of useless affairs</h1>
+        <p>submit your most pointless request. it will be processed by 7 departments. most will say no.</p>
+      </header>
+
+      <canvas id="scene" width="320" height="130"></canvas>
+      <div id="caption"><span id="who">reception</span><p id="said">awaiting your request...</p></div>
+
+      <form id="form" autocomplete="off">
+        <input id="req" type="text" maxlength="80" placeholder="can i blink?" />
+        <button id="go" type="submit">submit</button>
+      </form>
+      <div id="examples"></div>
+      <button id="mute" type="button">sound: on</button>
+
+      <section id="cert" class="hidden"></section>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
