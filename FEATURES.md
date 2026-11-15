@@ -64,6 +64,22 @@ what we are doing on department of useless affairs (stupid ideas hackathon, otta
 - **are you sure?** five in-page confirmations, each one more unsure. on the last one, yes and no swap places.
 - **the submit button gets shy:** when the ministry of vibes is in a mood, the button slides away from your cursor.
 
+### even more ideas
+
+- **monotone voice:** each department reads its verdict out loud in a flat government voice (browser speech synthesis, slow and low, no assets).
+- **ottawa news ticker:** a scrolling ticker of other citizens' cases. "kanata resident denied permission to sneeze." "permit to skate on the rideau canal under review since 1832."
+- **o-train delay:** sometimes processing stops: "your request is delayed. it was sent on the o-train."
+- **paper jam:** the paper gets stuck between two desks. click it 10 times to clear it. "pc load letter."
+- **fines:** you get fined for things as you use the site. typing too fast, hovering too long, using a question mark. they are added to the processing fee.
+- **come back:** when you switch tabs, the tab title becomes "your case is unattended" and the icon becomes a red stamp.
+- **peel the stickers:** stickers peel off when clicked and leave residue. peeling "property of the department" adds a fine.
+- **department merger:** mid-case, two departments merge into something like "the bureau of snack gravity", and both clerks squeeze behind one desk.
+- **clerk sneeze:** a clerk sneezes and the paper blows back one desk.
+- **invented holidays:** some dates are national holidays, like "the day of the stapler". all departments are closed.
+- **follow-up question:** a department asks "why do you need to blink?". any answer is "insufficient". good for the claude version later.
+- **2fa:** "we've sent a verification code to your fax machine."
+- **draft autosave:** "draft saved", then a second later "draft rejected".
+
 ## codex brief: pitch slideshow
 
 **task:** build a short pitch slideshow (8 to 10 slides) for this project, to present at the hackathon. use ai-generated images for the visuals.
