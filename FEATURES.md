@@ -1,32 +1,21 @@
 # tracker
 
-what we are doing on department of useless affairs (stupid ideas hackathon, ottawa, ai track). important app changes get a github issue, closed by the commit that does it. readme and tracker edits do not.
+what we are doing on department of useless affairs (stupid ideas hackathon, ottawa, ai track). new features and building blocks get a github issue, closed by the commit that does it. style tweaks, small fixes, readme and tracker edits do not.
 
 ## done
 
-- [x] core flow: request in, departments stamp it one by one, certificate out
-- [x] example request buttons, `?fast` and `?req=` demo helpers
-- [x] first sounds and copy-result button
-- [x] redesign as a government portal: cream grain background, plex fonts, case file, letterhead certificate, office canvas scene (#1)
-- [x] corporate stickers, as a notice board on small screens and stuck in the page margins on wide ones (#1, #7, #9)
-- [x] space between main and footer (#2)
-- [x] case file numbers centered (#3)
-- [x] departments picked from the request: topic matches, one invented from the main word, general filler, final council last (#4)
-- [x] always 7 departments (#10)
-- [x] random judging, and the final council can refuse with a notice of refusal (#5)
-- [x] wider then slightly narrower main content, stickers kept off the screen edge (#6, #8)
-- [x] sound fixed and redone as office sounds, on/off cuts playing sounds (#11)
-- [x] stamp after the verdict is read, sound on impact (#26)
-- [x] louder desk stamps (#27) and a sound for the certificate stamp (#28)
-- [x] README.md, short like pepguard
+- [x] core flow: request in, 7 departments stamp it one by one, certificate or notice of refusal out
+- [x] government portal look: case file, letterhead certificate, office canvas scene, corporate stickers
+- [x] departments picked from the request (#4)
+- [x] random judging, and the final council can refuse (#5)
+- [x] office sounds (#11)
+- [x] ottawa news ticker (#17)
+- [x] voices read the verdicts: 4 languages, an alien, clear english, a singing council (#18)
+- [x] fines (#20)
 
 ## next up
 
-- [ ] stupid features, one at a time:
-  - [x] ottawa news ticker (#17)
-  - [x] voices read the verdicts: 4 languages, an alien, clear english, a singing council (#18)
-  - [x] fines (#20)
-  - [ ] follow-up question (#25)
+- [ ] follow-up question (#25)
 - [ ] deploy (github pages or netlify) and make the repo public for judging
 - [ ] mobile check in a real browser
 
