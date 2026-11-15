@@ -62,6 +62,21 @@ nav { display: flex; flex-wrap: wrap; gap: 2px 20px; }
 nav a { color: var(--navy); text-decoration: none; font-weight: 500; font-size: 14.5px; padding: 6px 0; border-bottom: 2px solid transparent; transition: border-color 0.15s; }
 nav a:hover { border-bottom-color: var(--red); }
 
+/* news ticker */
+.ticker { position: relative; z-index: 1; display: flex; align-items: stretch; background: var(--ink); color: #e9e4d4; font: 500 13px/1 var(--mono); border-bottom: 1px solid #000; overflow: hidden; }
+.ticker-label { flex: none; display: flex; align-items: center; gap: 8px; padding: 9px 14px; background: var(--red); color: #fff; font-weight: 700; letter-spacing: 0.08em; }
+.ticker-label .rec { background: #fff; }
+.ticker-track { flex: 1; min-width: 0; overflow: hidden; display: flex; align-items: center; mask-image: linear-gradient(90deg, transparent, #000 24px, #000 calc(100% - 24px), transparent); }
+.ticker-items { position: relative; display: flex; white-space: nowrap; will-change: transform; }
+.ticker-item { padding: 0 18px; }
+.ticker-item[data-fresh] { color: var(--hl); font-weight: 700; animation: glow 1.4s ease-in-out infinite; }
+.ticker-item[data-fresh]::before { content: 'just in'; margin-right: 10px; padding: 3px 6px; background: var(--red); color: #fff; font-size: 10.5px; letter-spacing: 0.1em; border-radius: 2px; box-shadow: 0 0 10px rgba(229, 72, 77, 0.8); }
+@keyframes glow {
+  0%, 100% { text-shadow: 0 0 6px rgba(244, 224, 77, 0.9), 0 0 16px rgba(244, 224, 77, 0.5); }
+  50% { text-shadow: 0 0 2px rgba(244, 224, 77, 0.4); }
+}
+.ticker-item::after { content: '◆'; margin-left: 36px; color: var(--manila); font-size: 9px; vertical-align: 2px; }
+
 /* intro */
 main { padding-top: 18px; padding-bottom: 48px; }
 .crumbs { font-size: 13px; color: var(--muted); margin: 0 0 18px; }
@@ -247,6 +262,7 @@ button.secondary:hover { background: var(--manila-2); }
 }
 
 @media (max-width: 560px) {
+  .ticker-label { padding: 9px 10px; font-size: 11px; }
   .lang, .bar-right { display: none; }
   .wordmark { font-size: 20px; }
   .field-row { flex-direction: column; }

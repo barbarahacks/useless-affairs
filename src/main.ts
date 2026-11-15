@@ -2,6 +2,7 @@ import './style.css';
 import { FAST } from './config.ts';
 import { Scene } from './scene.ts';
 import { sound } from './sound.ts';
+import { initTicker, reportCase } from './ticker.ts';
 import { EXAMPLES, buildCase } from './departments.ts';
 import type { Case, Outcome } from './departments.ts';
 
@@ -23,6 +24,7 @@ const bar = $('progress-bar');
 let busy = false;
 
 sound.unlockOnGesture();
+initTicker($('ticker'));
 
 // typewriter; a newer message cancels an older one mid-sentence
 let sayToken = 0;
@@ -146,6 +148,7 @@ async function run(request: string): Promise<void> {
   if (c.granted) sound.fanfare();
   else sound.trombone();
   await scene.celebrate();
+  reportCase(`citizen ${c.granted ? 'granted' : 'denied'} permission to ${c.action} (case ${no}).`);
   cert.innerHTML = certificate(request.trim(), c, no, date);
   cert.classList.remove('hidden');
   cert.scrollIntoView({ behavior: FAST ? 'auto' : 'smooth', block: 'center' });
