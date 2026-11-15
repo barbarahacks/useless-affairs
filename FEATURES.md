@@ -17,7 +17,7 @@ what we are doing on department of useless affairs (stupid ideas hackathon, otta
   - [x] voices read the verdicts: 4 languages, an alien, clear english, a singing council (#18)
   - [x] fines (#20)
   - [x] follow-up question (#25)
-- [ ] deploy (github pages or netlify) and make the repo public for judging
+- [ ] deploy on netlify (#30): connect the repo, set ANTHROPIC_API_KEY
 - [ ] mobile check in a real browser
 
 ## claude (#29)
@@ -26,7 +26,7 @@ what we are doing on department of useless affairs (stupid ideas hackathon, otta
 - [x] served from the dev server at `/api/case`; locally it signs in through `ant auth login`
 - [x] falls back to the backup clerk (the old dummy) on no key, error or a 9s timeout
 - [x] tested: about 3.6s and $0.027 per request (opus 5.5, fast mode, medium effort)
-- [ ] serverless function on deploy
+- [x] netlify function for `/api/case` on deploy, 10 cases per visitor per minute (#30)
 
 ## ideas: stupid features
 

@@ -1,0 +1,10 @@
+# netlify: builds the site into dist/ and serves /api/case from netlify/functions/case.ts
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[functions]
+  node_bundler = "esbuild"

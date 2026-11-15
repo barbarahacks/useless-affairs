@@ -21,6 +21,10 @@ npm run build    # typecheck + production build into dist/
 
 restart `npm run dev` after adding or changing the key.
 
+## deploy (netlify)
+
+`netlify.toml` builds the site into `dist/`, and `netlify/functions/case.ts` serves `/api/case` with the same claude code as the dev server. set `ANTHROPIC_API_KEY` in netlify's environment variables. each visitor can make 10 cases a minute.
+
 ## demo urls
 
 ```
@@ -56,6 +60,7 @@ src/departments.ts  builds the case and judges it; the backup clerk's department
 src/ai.ts           fetches claude's departments from /api/case
 server/case.ts      the claude call (server only)
 vite.config.ts      serves /api/case from the dev server
+netlify/            the deployed /api/case function, with a rate limit
 src/scene.ts        canvas processing floor
 src/sprites.ts      pixel sprites
 src/sound.ts        web audio office sounds
