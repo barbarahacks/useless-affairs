@@ -3,6 +3,7 @@ import { FAST } from './config.ts';
 import { Scene } from './scene.ts';
 import { sound } from './sound.ts';
 import { initTicker, reportCase } from './ticker.ts';
+import { fine, finesOwed, initFines, money, settleFines } from './fines.ts';
 import { EXAMPLES, buildCase } from './departments.ts';
 import type { Case, Outcome } from './departments.ts';
 
@@ -25,6 +26,7 @@ let busy = false;
 
 sound.unlockOnGesture();
 initTicker($('ticker'));
+initFines($('fines'), $('fines-total'));
 
 // typewriter; a newer message cancels an older one mid-sentence
 let sayToken = 0;
@@ -72,7 +74,7 @@ stepList.innerHTML = '<li class="empty">departments are assigned once your reque
 const CREST = `<svg class="crest" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 3 42 9v13c0 12-8 19-18 23C14 41 6 34 6 22V9Z" fill="#1c2b4a"/><path d="M24 8l13 4.5V22c0 9-6 14.5-13 17.5C17 36.5 11 31 11 22v-9.5Z" fill="none" stroke="#e9d8a6" stroke-width="1.5"/><path d="M19 15h10v3H19zM21 18h6v8h-6zM16 26h16v4H16z" fill="#e9d8a6"/></svg>`;
 const SCRIBBLE = `<svg class="scribble" viewBox="0 0 180 44" aria-hidden="true"><path d="M6 30c8-22 16-24 18-10s-4 18 4 8 14-26 18-14-6 22 4 14 10-16 16-8 4 12 12 4 8-12 14-4 2 10 10 6 18-14 30-12 18 2 30-6"/></svg>`;
 
-function certificate(request: string, c: Case, no: string, date: string): string {
+function certificate(request: string, c: Case, no: string, date: string, fines: number): string {
   const fee = (Math.random() * 900 + 100).toFixed(2);
   const n = c.depts.length;
   const nos = c.verdicts.filter((v) => v.outcome === 'rejected').length;
@@ -90,6 +92,7 @@ function certificate(request: string, c: Case, no: string, date: string): string
         terms: ['refusal valid forever', 'appeals heard 9:00–9:05am', 'non-refundable', `processing fee: $${fee}`],
         stamp: 'denied<small>with joy</small>',
       };
+  if (fines > 0) text.terms.push(`fines owed: ${money(fines)}`);
   return `
     <div class="cert-card${c.granted ? '' : ' denied'}">
       <div class="cert-head">
@@ -119,6 +122,12 @@ async function run(request: string): Promise<void> {
   go.disabled = true;
   cert.classList.add('hidden');
   sound.stopSpeaking();
+  // fines for the request itself
+  if (request.includes('?')) fine('unauthorised question mark', 3.5);
+  const caps = (request.match(/[A-Z]/g) ?? []).length;
+  if (caps) fine(`${caps} capital letter${caps === 1 ? '' : 's'}. capital letters are not permitted on this website.`, caps);
+  fastTyping = false;
+  loitered = false;
   const c = buildCase(request);
   sound.newCast(c.depts.length, c.granted);
   scene.reset(c.depts.length);
@@ -154,7 +163,10 @@ async function run(request: string): Promise<void> {
   else sound.trombone();
   await scene.celebrate();
   reportCase(`citizen ${c.granted ? 'granted' : 'denied'} permission to ${c.action} (case ${no}).`);
-  cert.innerHTML = certificate(request.trim(), c, no, date);
+  const fines = finesOwed();
+  const fined = fines.reduce((a, f) => a + f.amount, 0);
+  settleFines();
+  cert.innerHTML = certificate(request.trim(), c, no, date, fined);
   cert.classList.remove('hidden');
   cert.scrollIntoView({ behavior: FAST ? 'auto' : 'smooth', block: 'center' });
 
@@ -165,7 +177,8 @@ async function run(request: string): Promise<void> {
   share.addEventListener('click', () => {
     const lines = c.verdicts.map((v, i) => `${v.outcome === 'approved' ? '✔' : '✖'} ${c.depts[i].name}`).join('\n');
     const verdict = c.granted ? `granted me provisional permission to ${c.action}` : `refused to let me ${c.action}`;
-    const text = `the department of useless affairs (case ${no}) ${verdict}.\n${lines}\n${c.granted ? '(valid for 4 minutes. void if enjoyed.)' : '(appeals heard 9:00–9:05am.)'}`;
+    const owed = fines.length ? `\nfines: ${money(fined)} (${fines.map((f) => f.reason).join(', ')})` : '';
+    const text = `the department of useless affairs (case ${no}) ${verdict}.\n${lines}${owed}\n${c.granted ? '(valid for 4 minutes. void if enjoyed.)' : '(appeals heard 9:00–9:05am.)'}`;
     void navigator.clipboard.writeText(text).then(() => (share.textContent = 'copied!'));
   });
   $('again').addEventListener('click', () => {
@@ -177,6 +190,34 @@ async function run(request: string): Promise<void> {
   busy = false;
   go.disabled = false;
 }
+
+// typing too fast: 6 keys inside 0.6 seconds, once per request
+let fastTyping = false;
+let keyTimes: number[] = [];
+input.addEventListener('keydown', (e) => {
+  if (e.key.length !== 1 || fastTyping) return;
+  const now = performance.now();
+  keyTimes = [...keyTimes, now].filter((t) => now - t < 600);
+  if (keyTimes.length >= 6) {
+    fastTyping = true;
+    fine('excessive typing speed', 12);
+  }
+});
+
+// loitering: the cursor sits still for 10 seconds while nothing is happening, once per request
+let loitered = false;
+let loiterTimer = 0;
+const watchLoitering = (): void => {
+  clearTimeout(loiterTimer);
+  if (loitered) return;
+  loiterTimer = window.setTimeout(() => {
+    if (busy || document.hidden || loitered) return;
+    loitered = true;
+    fine('loitering', 8);
+  }, 10000);
+};
+window.addEventListener('pointermove', watchLoitering);
+watchLoitering();
 
 form.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -204,6 +245,8 @@ for (const e of EXAMPLES) {
   b.type = 'button';
   b.textContent = e;
   b.addEventListener('click', () => {
+    if (busy) return;
+    fine('plagiarising a frequently requested request', 5);
     input.value = e;
     void run(e);
   });

@@ -25,7 +25,7 @@ what we are doing on department of useless affairs (stupid ideas hackathon, otta
 - [ ] stupid features, one at a time:
   - [x] ottawa news ticker (#17)
   - [x] voices read the verdicts: 4 languages, an alien, clear english, a singing council (#18)
-  - [ ] fines (#20)
+  - [x] fines (#20)
   - [ ] clerk sneeze (#23)
   - [ ] follow-up question (#25)
 - [ ] deploy (github pages or netlify) and make the repo public for judging

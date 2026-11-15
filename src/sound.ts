@@ -240,6 +240,12 @@ export const sound = {
       tone(147, 0.16, 0.8, 0.14, 'square');
     }
   },
+  // a fine: cash register ka-ching
+  fine(): void {
+    hiss(0, 0.05, 0.6, 3000, 'highpass');
+    tone(2093, 0.04, 0.25, 0.14);
+    tone(2637, 0.12, 0.6, 0.14);
+  },
   fanfare(): void {
     [523, 659, 784, 1047].forEach((f, i) => tone(f, i * 0.12, i === 3 ? 0.9 : 0.3, 0.12, 'triangle'));
   },

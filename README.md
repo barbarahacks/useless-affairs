@@ -29,6 +29,18 @@ npm run build    # typecheck + production build into dist/
 /?fast&req=can%20i%20blink     both, good for screenshots
 ```
 
+## fines
+
+you get fined as you use the site. fines show up as a notice slip, add up in the case file, and are added to the certificate.
+
+| trigger | fine |
+| --- | --- |
+| a `?` in your request | $3.50, unauthorised question mark |
+| capital letters in your request | $1.00 each |
+| clicking a frequently requested example | $5.00, plagiarism |
+| typing 6 keys in under 0.6s | $12.00, excessive typing speed |
+| not moving the cursor for 10s while idle | $8.00, loitering |
+
 ## the departments (dummy for now)
 
 departments and their lines come from local keywords and templates in `src/departments.ts`. the plan is for claude to generate them per request, with this as the fallback.
