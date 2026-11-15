@@ -1,6 +1,6 @@
 # tracker
 
-what we are doing on department of useless affairs (stupid ideas hackathon, ottawa, ai track). every request gets a github issue, closed by the commit that does it.
+what we are doing on department of useless affairs (stupid ideas hackathon, ottawa, ai track). important app changes get a github issue, closed by the commit that does it. readme and tracker edits do not.
 
 ## done
 
