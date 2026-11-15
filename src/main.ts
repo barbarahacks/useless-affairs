@@ -166,7 +166,11 @@ async function run(request: string): Promise<void> {
     const v = c.verdicts[i];
     // read the verdict first (typed and spoken), then stamp it
     const line = `${v.outcome}. ${v.reason}`;
-    await Promise.all([say(c.depts[i].name, line), sound.speak(`${c.depts[i].name}. ${line}`, i)]);
+    // the department announces itself, pauses for effect, then reads the verdict as it types
+    void say(c.depts[i].name, '');
+    await sound.speak(c.depts[i].name, i);
+    await sleep(1000);
+    await Promise.all([say(c.depts[i].name, line), sound.speak(line, i)]);
     await sleep(250);
     await scene.stamp(i, v.outcome, () => {
       sound.stamp(v.outcome === 'approved');
