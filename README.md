@@ -2,7 +2,7 @@
 
 submit your most pointless request. it gets routed to the departments relevant to it. most will say no. built for the stupid ideas hackathon (ottawa).
 
-see [FEATURES.md](FEATURES.md) for the full feature list.
+see [FEATURES.md](FEATURES.md) for what we are working on.
 
 ## run it
 
