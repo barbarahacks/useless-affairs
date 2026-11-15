@@ -2,7 +2,7 @@ export type Outcome = 'approved' | 'rejected';
 
 export interface Dept {
   name: string;
-  clerk: string; // body color
+  clerk: string; // suit color
   reject: string[];
   approve: string[];
 }
@@ -11,43 +11,43 @@ export interface Dept {
 export const DEPTS: Dept[] = [
   {
     name: 'bureau of preliminary paperwork',
-    clerk: '#ff5a5f',
+    clerk: '#2f4a7a',
     reject: ['form 27b-stroke-6 is missing. in triplicate. in blue ink.', 'your request was filed on a tuesday, which is not a day.'],
     approve: ['preliminary paperwork exists. this is the best we have ever seen.'],
   },
   {
     name: 'ministry of minor bodily autonomy',
-    clerk: '#2f9bff',
+    clerk: '#4a4f5c',
     reject: ['you have not proven the body doing "{req}" is yours.', 'your elbows were not consulted.'],
     approve: ['your body is yours until the end of the fiscal quarter.'],
   },
   {
     name: 'department of snack oversight',
-    clerk: '#ffd23f',
+    clerk: '#7a3b3b',
     reject: ['no snack has been identified in this request. suspicious.', 'we do not recognize "{req}" as a legitimate activity.'],
     approve: ['approved, but only if it is crunchy.'],
   },
   {
     name: 'office of gravity compliance',
-    clerk: '#5ed67a',
+    clerk: '#5d6b45',
     reject: ['gravity has not signed off on "{req}".', 'you are currently being pulled down without a permit.'],
     approve: ['gravity says "sure, whatever".'],
   },
   {
     name: 'bureau of sitting & standing',
-    clerk: '#d65bff',
+    clerk: '#9a7a4e',
     reject: ['vertical clearance certificate not on file.', 'your posture is under investigation.'],
     approve: ['approved on the condition that you remain upright or horizontal. no diagonals.'],
   },
   {
     name: 'ministry of vibes',
-    clerk: '#ff8a1f',
+    clerk: '#3f6f73',
     reject: ['the vibes are off. we cannot say how.', '"{req}" gave the committee a bad feeling.'],
     approve: ['vibes are acceptable. barely.'],
   },
   {
     name: 'supreme council of final stamps',
-    clerk: '#4fc3f7',
+    clerk: '#1c2b4a',
     reject: [],
     approve: ['after 6 hours of deliberation, we stamped it just to make it stop.'],
   },

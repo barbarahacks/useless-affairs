@@ -1,4 +1,4 @@
-# department of useless affairs
+# department of useless affairs 🏛️
 
 submit your most pointless request. it gets processed by 7 departments. most will say no. built for the stupid ideas hackathon (ottawa).
 

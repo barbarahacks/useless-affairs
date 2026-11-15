@@ -1,19 +1,19 @@
 // pixel sprites: each row is a string, one char per pixel, '.' is transparent.
-// palette keys map to colors; 'b' (body) is swapped per clerk.
+// palette keys map to colors; 'b' (suit) and 'h' (hair) are swapped per clerk.
 
 export const PAL: Record<string, string> = {
-  k: '#2a1f14', // outline
+  k: '#2b2f3a', // outline
   w: '#ffffff',
-  g: '#b8c0cc', // paper lines
-  s: '#ffd0a0', // skin
-  h: '#6b3f1d', // hair
-  e: '#2a1f14', // eyes
-  m: '#c2273a', // mouth
-  u: '#3a3f6b', // suit sleeve
-  r: '#a8642a', // stamp handle
-  R: '#ff3b4e', // stamp base
-  G: '#12b76a',
-  Y: '#ffd23f',
+  g: '#b8bcc6', // paper lines
+  s: '#f1c9a0', // skin
+  h: '#4a3020', // hair
+  e: '#2b2f3a', // eyes
+  m: '#8a4b3f', // mouth (unimpressed)
+  t: '#c8312f', // tie
+  u: '#2f3b55', // suit sleeve
+  r: '#7a5a3a', // stamp handle
+  R: '#c8312f', // stamp base / rejected
+  G: '#2e7d4f', // approved
 };
 
 export type Sprite = string[];
@@ -25,12 +25,12 @@ export const CLERK: Sprite = [
   '..kssssssk..',
   '..ksessesk..',
   '..kssssssk..',
-  '..kssmmssk..',
+  '..ksmmmmsk..',
   '....kssk....',
-  '..kbbbbbbk..',
-  '.kbbwwwwbbk.',
-  '.kbbbwwbbbk.',
-  '.kbbbbbbbbk.',
+  '..kbbwwbbk..',
+  '.kbbwttwbbk.',
+  '.kbbbttbbbk.',
+  '.kbbbttbbbk.',
   '.kbbbbbbbbk.',
   '.kkkkkkkkkk.',
 ];
@@ -87,6 +87,29 @@ export const CROSS: Sprite = [
   'RR...RR.',
   'R.....R.',
 ];
+
+export const CLOCK: Sprite = [
+  '..kkkkk..',
+  '.kwwwwwk.',
+  'kwwwwwwwk',
+  'kwwwwwwwk',
+  'kwwwwwwwk',
+  'kwwwwwwwk',
+  'kwwwwwwwk',
+  '.kwwwwwk.',
+  '..kkkkk..',
+];
+
+// 3x5 desk-plate digits
+export const DIGITS: Record<number, Sprite> = {
+  1: ['.w.', 'ww.', '.w.', '.w.', 'www'],
+  2: ['ww.', '..w', '.w.', 'w..', 'www'],
+  3: ['ww.', '..w', '.w.', '..w', 'ww.'],
+  4: ['w.w', 'w.w', 'www', '..w', '..w'],
+  5: ['www', 'w..', 'ww.', '..w', 'ww.'],
+  6: ['.ww', 'w..', 'www', 'w.w', 'www'],
+  7: ['www', '..w', '.w.', '.w.', '.w.'],
+};
 
 export function drawSprite(ctx: CanvasRenderingContext2D, sprite: Sprite, x: number, y: number, swap: Record<string, string> = {}): void {
   for (let row = 0; row < sprite.length; row++) {
