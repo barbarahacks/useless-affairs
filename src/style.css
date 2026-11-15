@@ -37,7 +37,7 @@ body {
   overflow-x: clip;
   -webkit-font-smoothing: antialiased;
 }
-.wrap { max-width: 1140px; margin: 0 auto; padding: 0 16px; }
+.wrap { max-width: 1250px; margin: 0 auto; padding: 0 16px; }
 .topbar, .masthead, main, .foot { position: relative; z-index: 1; }
 .hidden { display: none !important; }
 .label, .lbl { font: 600 10.5px/1.2 var(--mono); letter-spacing: 0.12em; color: var(--muted); }
@@ -78,7 +78,6 @@ nav a:hover { border-bottom-color: var(--red); }
 .ticker-item::after { content: '◆'; margin-left: 36px; color: var(--manila); font-size: 9px; vertical-align: 2px; }
 
 /* intro */
-main { padding-top: 18px; padding-bottom: 48px; }
 .crumbs { font-size: 13px; color: var(--muted); margin: 0 0 18px; }
 .crumbs span { margin: 0 6px; color: #a3a6b0; }
 .intro { display: grid; grid-template-columns: 1fr auto; gap: 20px 40px; align-items: end; animation: rise 0.5s ease both; }
@@ -220,8 +219,8 @@ button.secondary:hover { background: var(--manila-2); }
 .foot { margin-top: 72px; border-top: 1px solid var(--line); background: var(--paper); font-size: 12.5px; color: var(--muted); }
 .foot .wrap { display: flex; flex-wrap: wrap; gap: 6px 18px; padding-top: 16px; padding-bottom: 16px; }
 
-/* stickers: a notice board on small screens, stuck on the wall behind the page on big ones */
-.stickers { position: relative; z-index: 1; max-width: 1140px; margin: 0 auto; padding: 0 16px 44px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 28px 30px; }
+/* stickers: their own notice-board section at the bottom, with a fixed width of its own (not tied to .wrap) */
+.stickers { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 0 16px 44px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 28px 30px; }
 .stickers::before { content: 'department notice board · please do not add stickers'; flex-basis: 100%; text-align: center; font: 600 10.5px/1 var(--mono); letter-spacing: 0.12em; color: var(--muted); padding-top: 24px; border-top: 1px dashed #cfc6ae; }
 .sticker { flex: none; zoom: 0.8; transform: rotate(var(--r, 0deg)); filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.18)) drop-shadow(0 5px 7px rgba(0, 0, 0, 0.08)); line-height: 1.15; user-select: none; }
 .sticker b, .sticker small, .sticker .lbl { display: block; }
@@ -257,21 +256,12 @@ button.secondary:hover { background: var(--manila-2); }
 .s-ticket .lbl { color: #7a2620; font-size: 9px; }
 .s-ticket b { font: 700 27px/1.1 var(--mono); }
 
-/* wide screens: stickers are stuck onto the page itself and scroll with it */
-@media (min-width: 1480px) {
-  .stickers { position: absolute; inset: 0; z-index: 0; max-width: none; padding: 0; display: block; pointer-events: none; }
-  .stickers::before { display: none; }
-  .sticker { position: absolute; }
-  .s-seal { left: 52px; top: 280px; }
-  .s-name { left: 44px; top: 510px; }
-  .s-note { left: 60px; top: 740px; }
-  .s-asset { left: 46px; top: 980px; }
-  .s-oval { left: 54px; top: 1200px; }
-  .s-emp { right: 50px; top: 260px; }
-  .s-pin { right: 68px; top: 490px; }
-  .s-award { right: 48px; top: 710px; }
-  .s-warn { right: 54px; top: 950px; }
-  .s-ticket { right: 52px; top: 1180px; }
+/* desktop notice board: 6 stickers on top, 4 below */
+@media (min-width: 900px) {
+  .stickers { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); justify-items: center; gap: 30px 16px; }
+  .stickers::before { grid-column: 1 / -1; }
+  .sticker { grid-column: span 2; }
+  .sticker:nth-child(n + 7) { grid-column: span 3; }
 }
 
 @media (max-width: 880px) {

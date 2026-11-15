@@ -174,7 +174,7 @@ async function run(request: string): Promise<void> {
   if (c.granted) sound.fanfare();
   else sound.trombone();
   await scene.celebrate();
-  reportCase(`citizen ${c.granted ? 'granted' : 'denied'} permission to ${c.action} (case ${no}).`);
+  reportCase(`citizen ${c.granted ? 'granted' : 'denied'} permission to "${c.action}" (case ${no}).`);
   const fines = finesOwed();
   const fined = fines.reduce((a, f) => a + f.amount, 0);
   settleFines();

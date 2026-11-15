@@ -107,11 +107,22 @@ if (synth) {
 const named = (n: string): SpeechSynthesisVoice | undefined => all.find((v) => v.name === n) ?? all.find((v) => v.name.startsWith(`${n} (`));
 const langOf = (v: SpeechSynthesisVoice): string => v.lang.toLowerCase().replace('_', '-');
 // the clearest voice for a role: a preferred name, else any voice in that language
+// smoothest first: chrome's online google voices, then apple premium/enhanced voices, then the named fallbacks
 function voiceFor(role: Role): SpeechSynthesisVoice | undefined {
-  const byName = PREFER[role].map(named).find(Boolean);
-  if (byName || role === 'alien') return byName;
+  if (role === 'alien') return PREFER.alien.map(named).find(Boolean);
   const code = role === 'zh' ? 'zh-cn' : role;
-  return all.find((v) => langOf(v).startsWith(code) && v.default) ?? all.find((v) => langOf(v).startsWith(code));
+  const inLang = all.filter((v) => langOf(v).startsWith(code));
+  const google = inLang.filter((v) => v.name.startsWith('Google'));
+  const smooth = inLang.filter((v) => /\((premium|enhanced)\)/i.test(v.name));
+  // english: prefer a us voice, and for google the plain "google us english"
+  const us = (list: SpeechSynthesisVoice[]): SpeechSynthesisVoice | undefined => list.find((v) => langOf(v) === 'en-us') ?? list[0];
+  return (
+    (role === 'en' ? us(google) : google[0]) ??
+    (role === 'en' ? us(smooth) : smooth[0]) ??
+    PREFER[role].map(named).find(Boolean) ??
+    inLang.find((v) => v.default) ??
+    inLang[0]
+  );
 }
 
 interface Persona {
