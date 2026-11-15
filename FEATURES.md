@@ -18,7 +18,7 @@ what we are doing on department of useless affairs (stupid ideas hackathon, otta
   - [x] fines (#20)
   - [x] follow-up question (#25)
 - [x] deployed on netlify, with claude: https://useless-affairs.netlify.app (#30)
-- [ ] mobile check in a real browser
+- [x] mobile: site works and voices play on iphone safari (reception speaks in the tap to unlock speech)
 
 ## claude (#29)
 
