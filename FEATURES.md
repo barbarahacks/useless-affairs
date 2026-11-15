@@ -75,7 +75,7 @@ what we are doing on department of useless affairs (stupid ideas hackathon, otta
 ## submission post
 
 **title:** department of useless affairs 🏛️
-**tags:** the ai track tag + ottawa
+**tags:** stupidest ai + ottawa
 **made by:**
 barbara eguche @barbarahacks
 
