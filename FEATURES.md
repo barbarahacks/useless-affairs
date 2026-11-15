@@ -49,6 +49,21 @@ what we are doing on department of useless affairs (stupid ideas hackathon, otta
 - **stamp cursor:** click anywhere on the site to stamp "rejected" on the page itself.
 - **permits wallet:** your certificates are kept on the device. all of them have expired.
 
+### more ideas, dumber
+
+- **office hours are real:** judging depends on your actual clock. before 10am nothing gets approved (no coffee yet). 12–1 the desks are empty. after 4:55pm everything is approved instantly: "we just want to go home".
+- **closed on weekends:** on saturday and sunday the whole site is closed. the hackathon is on a weekend, so judges get a tiny "open anyway (judges only)" link.
+- **dark mode by application:** the dark mode toggle is a request. you submit "can i have dark mode?", it goes through the departments, and if approved you get dark mode for 4 minutes.
+- **the stamp runs out of ink:** each stamp is fainter than the last. by desk 7 it's barely visible: "ink requisition rejected".
+- **rejection loyalty program:** "you have been rejected 12 times. you are now a gold member. gold members are rejected faster."
+- **legalese:** your request is rewritten as a formal title. "can i blink" becomes "application for temporary voluntary ocular closure (form oc-1)". good for the claude version later.
+- **receipt:** a thermal receipt prints out of the bottom of the page, far too long, itemising "1x hope ... $0.00" and "rejection handling fee ... $4.00".
+- **mandatory meeting:** at random, every clerk walks to the middle of the floor, nothing happens for 10 seconds, and they walk back. "this meeting could have been an email."
+- **unread memos:** the top bar shows "you have 4,019 unread memos", and it goes up every time a department cc's another one.
+- **request password rules:** your request must contain a number, a department name and a feeling. it must not contain capital letters, which are not permitted on this website.
+- **are you sure?** five in-page confirmations, each one more unsure. on the last one, yes and no swap places.
+- **the submit button gets shy:** when the ministry of vibes is in a mood, the button slides away from your cursor.
+
 ## codex brief: pitch slideshow
 
 **task:** build a short pitch slideshow (8 to 10 slides) for this project, to present at the hackathon. use ai-generated images for the visuals.
