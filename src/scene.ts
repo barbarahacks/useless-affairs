@@ -1,12 +1,10 @@
 import { CHECK, CLERK, CLOCK, CROSS, DIGITS, HAND, PAPER, drawSprite } from './sprites.ts';
 import { FAST } from './config.ts';
-import { DEPTS } from './departments.ts';
 import type { Outcome } from './departments.ts';
 
 export const W = 320;
 export const H = 130;
 
-const stationX = (i: number): number => 28 + i * 44;
 const DESK_Y = 70;
 const PAPER_Y = 60;
 const HAND_UP = -22;
@@ -14,6 +12,8 @@ const HAND_DOWN = PAPER_Y - 15;
 const FLOOR_Y = 92;
 const OUTLINE = '#2b2f3a';
 const HAIR = ['#3b2a1e', '#6b4a2b', '#1f1f24', '#8a8a8a', '#a8823f', '#4a3020', '#d9d9d9'];
+export const SUITS = ['#2f4a7a', '#4a4f5c', '#7a3b3b', '#5d6b45', '#9a7a4e', '#3f6f73'];
+const COUNCIL = '#1c2b4a';
 const LIGHTS = [18, 98, 178, 258];
 
 const ease = (t: number): number => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
@@ -48,7 +48,8 @@ function tween(ms: number, step: (t: number) => void): Promise<void> {
 
 export class Scene {
   private ctx: CanvasRenderingContext2D;
-  private marks: (Outcome | null)[] = DEPTS.map(() => null);
+  private count = 7;
+  private marks: (Outcome | null)[] = Array(7).fill(null);
   private paper = { x: -14, y: PAPER_Y, stamped: null as Outcome | null };
   private hand = { x: 0, y: HAND_UP };
   private active = -1;
@@ -67,8 +68,18 @@ export class Scene {
     requestAnimationFrame(loop);
   }
 
-  reset(): void {
-    this.marks = DEPTS.map(() => null);
+  // stations spread evenly across the floor
+  private stationX(i: number): number {
+    return Math.round((W / this.count) * (i + 0.5));
+  }
+
+  private suit(i: number): string {
+    return i === this.count - 1 ? COUNCIL : SUITS[i % SUITS.length];
+  }
+
+  reset(count = this.count): void {
+    this.count = count;
+    this.marks = Array(count).fill(null);
     this.paper = { x: -14, y: PAPER_Y, stamped: null };
     this.hand = { x: 0, y: HAND_UP };
     this.active = -1;
@@ -80,7 +91,7 @@ export class Scene {
     this.active = i;
     this.rush = true;
     const from = this.paper.x;
-    const to = stationX(i) + 4;
+    const to = this.stationX(i) + 4;
     this.paper.stamped = null;
     await tween(520, (t) => {
       this.paper.x = from + (to - from) * t;
@@ -90,7 +101,7 @@ export class Scene {
   }
 
   async stamp(i: number, outcome: Outcome): Promise<void> {
-    this.hand.x = stationX(i) + 4 - 8;
+    this.hand.x = this.stationX(i) + 4 - 8;
     await tween(260, (t) => (this.hand.y = HAND_UP + (HAND_DOWN - HAND_UP) * t));
     this.paper.stamped = outcome;
     this.marks[i] = outcome;
@@ -192,11 +203,11 @@ export class Scene {
     for (let r = 1; r <= 3; r++) ctx.fillRect(160 + Math.round(Math.cos(a) * r), 24 + Math.round(Math.sin(a) * r), 1, 1);
 
     // stations
-    for (let i = 0; i < DEPTS.length; i++) {
-      const cx = stationX(i);
+    for (let i = 0; i < this.count; i++) {
+      const cx = this.stationX(i);
       const bob = this.active === i && this.hand.y > HAND_UP + 4 ? 1 : 0;
       const idle = Math.sin(now / 400 + i) > 0.9 ? 1 : 0;
-      drawSprite(ctx, CLERK, cx - 6, 58 - bob - idle, { b: DEPTS[i].clerk, h: HAIR[i] });
+      drawSprite(ctx, CLERK, cx - 6, 58 - bob - idle, { b: this.suit(i), h: HAIR[i % HAIR.length] });
 
       // in-tray of forms and a mug
       ctx.fillStyle = OUTLINE;

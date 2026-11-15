@@ -1,7 +1,7 @@
 import './style.css';
 import { FAST } from './config.ts';
 import { Scene } from './scene.ts';
-import { DEPTS, EXAMPLES, buildCase } from './departments.ts';
+import { EXAMPLES, buildCase } from './departments.ts';
 import type { Case, Outcome } from './departments.ts';
 
 if (FAST) document.documentElement.classList.add('fast');
@@ -37,6 +37,7 @@ function blip(freq: number, ms = 40, type: OscillatorType = 'square', vol = 0.04
   o.start();
   o.stop(ac.currentTime + ms / 1000);
 }
+const sadTrombone = (): void => [392, 370, 349, 311].forEach((f, i) => setTimeout(() => blip(f, i === 3 ? 600 : 260, 'sawtooth', 0.05), i * 300));
 const jingle = (): void => [523, 659, 784, 1047].forEach((f, i) => setTimeout(() => blip(f, 160, 'triangle', 0.08), i * 120));
 
 // typewriter; a newer message cancels an older one mid-sentence
@@ -60,45 +61,63 @@ async function say(name: string, text: string): Promise<void> {
 // case file: one row per department
 type StepState = 'pending' | 'review' | Outcome;
 const CHIP: Record<StepState, string> = { pending: 'pending', review: 'in review', approved: 'approved', rejected: 'rejected' };
-const steps = DEPTS.map((d, i) => {
-  const li = document.createElement('li');
-  li.innerHTML = `<span class="num">${i + 1}</span><div class="info"><span class="name">${esc(d.name)}</span><span class="reason"></span></div><span class="chip"></span>`;
-  $('steps').appendChild(li);
-  return li;
-});
+const stepList = $('steps');
+let steps: HTMLLIElement[] = [];
+function openCaseFile(c: Case): void {
+  stepList.innerHTML = '';
+  steps = c.depts.map((d, i) => {
+    const li = document.createElement('li');
+    li.innerHTML = `<span class="num">${i + 1}</span><div class="info"><span class="name">${esc(d.name)}</span><span class="reason"></span></div><span class="chip"></span>`;
+    stepList.appendChild(li);
+    return li;
+  });
+  steps.forEach((_, i) => setStep(i, 'pending'));
+  bar.style.width = '0%';
+}
 function setStep(i: number, state: StepState, reason = ''): void {
   const li = steps[i];
   li.dataset.state = state;
   li.querySelector('.chip')!.textContent = CHIP[state];
   li.querySelector('.reason')!.textContent = reason;
 }
-function resetSteps(): void {
-  steps.forEach((_, i) => setStep(i, 'pending'));
-  bar.style.width = '0%';
-}
-resetSteps();
+stepList.innerHTML = '<li class="empty">departments are assigned once your request is received, based on what it is about.</li>';
 
 const CREST = `<svg class="crest" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 3 42 9v13c0 12-8 19-18 23C14 41 6 34 6 22V9Z" fill="#1c2b4a"/><path d="M24 8l13 4.5V22c0 9-6 14.5-13 17.5C17 36.5 11 31 11 22v-9.5Z" fill="none" stroke="#e9d8a6" stroke-width="1.5"/><path d="M19 15h10v3H19zM21 18h6v8h-6zM16 26h16v4H16z" fill="#e9d8a6"/></svg>`;
 const SCRIBBLE = `<svg class="scribble" viewBox="0 0 180 44" aria-hidden="true"><path d="M6 30c8-22 16-24 18-10s-4 18 4 8 14-26 18-14-6 22 4 14 10-16 16-8 4 12 12 4 8-12 14-4 2 10 10 6 18-14 30-12 18 2 30-6"/></svg>`;
 
 function certificate(request: string, c: Case, no: string, date: string): string {
   const fee = (Math.random() * 900 + 100).toFixed(2);
-  const rows = c.verdicts.map((v, i) => `<tr class="${v.outcome}"><td>${i + 1}</td><td>${esc(DEPTS[i].name)}</td><td>${v.outcome}</td></tr>`).join('');
+  const n = c.depts.length;
+  const nos = c.verdicts.filter((v) => v.outcome === 'rejected').length;
+  const rows = c.verdicts.map((v, i) => `<tr class="${v.outcome}"><td>${i + 1}</td><td>${esc(c.depts[i].name)}</td><td>${v.outcome}</td></tr>`).join('');
+  const text = c.granted
+    ? {
+        title: 'certificate of provisional permission',
+        body: `the bearer of the request <q>${esc(request)}</q> has survived ${n} departments and ${nos} rejection${nos === 1 ? '' : 's'}, and is hereby granted permission, subject to the following terms:`,
+        terms: ['valid for 4 minutes', 'non-transferable', 'void if enjoyed', `processing fee: $${fee}`],
+        stamp: 'approved<small>reluctantly</small>',
+      }
+    : {
+        title: 'notice of refusal',
+        body: `the request <q>${esc(request)}</q> was reviewed by ${n} departments, collected ${nos} rejection${nos === 1 ? '' : 's'}, and has been refused. you may appeal by submitting the exact same request again.`,
+        terms: ['refusal valid forever', 'appeals heard 9:00–9:05am', 'non-refundable', `processing fee: $${fee}`],
+        stamp: 'denied<small>with joy</small>',
+      };
   return `
-    <div class="cert-card">
+    <div class="cert-card${c.granted ? '' : ' denied'}">
       <div class="cert-head">
         ${CREST}
         <div><p class="cert-gov">government of nowhere</p><p class="cert-dept">department of useless affairs</p></div>
         <div class="cert-ref"><span>ref. ${no}</span><span>form 0-0-0</span><span>${date}</span></div>
       </div>
-      <h2>certificate of provisional permission</h2>
-      <p class="cert-to">to <em>${esc(c.action)}</em></p>
-      <p class="body">the bearer of the request <q>${esc(request)}</q> has survived 7 departments and 4 rejections, and is hereby granted permission, subject to the following terms:</p>
-      <ul class="terms"><li>valid for 4 minutes</li><li>non-transferable</li><li>void if enjoyed</li><li>processing fee: $${fee}</li></ul>
+      <h2>${text.title}</h2>
+      <p class="cert-to">${c.granted ? 'to' : 'regarding:'} <em>${esc(c.action)}</em></p>
+      <p class="body">${text.body}</p>
+      <ul class="terms">${text.terms.map((t) => `<li>${t}</li>`).join('')}</ul>
       <table class="verdicts"><thead><tr><th>no.</th><th>department</th><th>decision</th></tr></thead><tbody>${rows}</tbody></table>
       <div class="cert-foot">
         <div class="sig">${SCRIBBLE}<span>the minister of final stamps</span></div>
-        <div class="cert-stamp">approved<small>reluctantly</small></div>
+        <div class="cert-stamp">${text.stamp}</div>
       </div>
       <div class="cert-actions">
         <button id="share" type="button">copy result</button>
@@ -112,31 +131,32 @@ async function run(request: string): Promise<void> {
   busy = true;
   go.disabled = true;
   cert.classList.add('hidden');
-  scene.reset();
-  resetSteps();
-
   const c = buildCase(request);
+  scene.reset(c.depts.length);
+  openCaseFile(c);
+
   const no = `ua-${String(Math.floor(Math.random() * 1e6)).padStart(6, '0')}`;
   const date = new Date().toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' }).toLowerCase();
   caseNo.textContent = `case no. ${no}`;
 
-  await say('reception', `request received: "${request.trim()}". case ${no} opened. routing to 7 departments.`);
+  await say('reception', `request received: "${request.trim()}". case ${no} opened. assigned to ${c.depts.length} relevant departments.`);
   await sleep(400);
 
-  for (let i = 0; i < DEPTS.length; i++) {
+  for (let i = 0; i < c.depts.length; i++) {
     const v = c.verdicts[i];
     setStep(i, 'review');
     await scene.moveTo(i);
     await scene.stamp(i, v.outcome);
     blip(v.outcome === 'approved' ? 880 : 140, 200, v.outcome === 'approved' ? 'triangle' : 'sawtooth', 0.08);
     setStep(i, v.outcome, v.reason);
-    bar.style.width = `${((i + 1) / DEPTS.length) * 100}%`;
-    await say(DEPTS[i].name, `${v.outcome}. ${v.reason}`);
+    bar.style.width = `${((i + 1) / c.depts.length) * 100}%`;
+    await say(c.depts[i].name, `${v.outcome}. ${v.reason}`);
     await sleep(700);
   }
 
-  await say('reception', 'processing complete. your certificate has been issued.');
-  jingle();
+  await say('reception', c.granted ? 'processing complete. your certificate has been issued.' : 'processing complete. your request has been refused. a notice has been issued.');
+  if (c.granted) jingle();
+  else sadTrombone();
   await scene.celebrate();
   cert.innerHTML = certificate(request.trim(), c, no, date);
   cert.classList.remove('hidden');
@@ -144,8 +164,9 @@ async function run(request: string): Promise<void> {
 
   const share = $('share');
   share.addEventListener('click', () => {
-    const lines = c.verdicts.map((v, i) => `${v.outcome === 'approved' ? '✔' : '✖'} ${DEPTS[i].name}`).join('\n');
-    const text = `the department of useless affairs (case ${no}) granted me provisional permission to ${c.action}.\n${lines}\n(valid for 4 minutes. void if enjoyed.)`;
+    const lines = c.verdicts.map((v, i) => `${v.outcome === 'approved' ? '✔' : '✖'} ${c.depts[i].name}`).join('\n');
+    const verdict = c.granted ? `granted me provisional permission to ${c.action}` : `refused to let me ${c.action}`;
+    const text = `the department of useless affairs (case ${no}) ${verdict}.\n${lines}\n${c.granted ? '(valid for 4 minutes. void if enjoyed.)' : '(appeals heard 9:00–9:05am.)'}`;
     void navigator.clipboard.writeText(text).then(() => (share.textContent = 'copied!'));
   });
   $('again').addEventListener('click', () => {

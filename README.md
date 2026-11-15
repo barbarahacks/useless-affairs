@@ -1,6 +1,6 @@
 # department of useless affairs 🏛️
 
-submit your most pointless request. it gets processed by 7 departments. most will say no. built for the stupid ideas hackathon (ottawa).
+submit your most pointless request. it gets routed to the departments relevant to it. most will say no. built for the stupid ideas hackathon (ottawa).
 
 see [FEATURES.md](FEATURES.md) for the full feature list.
 
@@ -39,7 +39,7 @@ handy urls while developing:
 
 1. **title:** "department of useless affairs." image: the exterior of a drab government building with a small sign. subtitle: "a service nobody asked for."
 2. **the problem:** "citizens are doing things without permission." image: a person blinking at a desk, looking unsure. line: "every day, millions of people blink. unsupervised."
-3. **the solution:** "7 departments. 4 rejections. 1 certificate." image: a corridor with 7 numbered office doors.
+3. **the solution:** "every request gets its own departments. most say no." image: a corridor of identical numbered office doors.
 4. **meet the departments:** one office photo with seven small labelled callouts (paperwork, bodily autonomy, snacks, gravity, sitting & standing, vibes, final stamps).
 5. **live demo:** a real screenshot of the app mid-request. cut to the app live here.
 6. **the certificate:** a photo of a framed certificate on an office wall, with the app's real certificate beside it. line: "valid for 4 minutes. void if enjoyed."

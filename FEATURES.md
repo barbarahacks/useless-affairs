@@ -1,21 +1,20 @@
 # department of useless affairs: features
 
-a pixel-art bureaucracy simulator for the stupid ideas hackathon (ottawa). submit a pointless request, and it gets processed by 7 departments. most will say no.
+a pixel-art bureaucracy simulator for the stupid ideas hackathon (ottawa). submit a pointless request, and it gets routed to the departments relevant to it. most will say no.
 
 ## core flow
 
 - **request input:** type anything, or leave it blank to use the default, "can i blink?".
 - **example buttons:** one-click requests such as "can i eat another chip?" and "am i legally allowed to go to bed?".
 - **request cleanup:** phrases like "can i", "may i", "am i allowed to" and "i want to" are stripped, so the action reads naturally on the certificate. an empty request becomes "do absolutely nothing".
-- **7 departments:** each has its own clerk colour, rejection lines and approval lines.
-  - bureau of preliminary paperwork
-  - ministry of minor bodily autonomy
-  - department of snack oversight
-  - office of gravity compliance
-  - bureau of sitting & standing
-  - ministry of vibes
-  - supreme council of final stamps
-- **always 4 rejections:** exactly 4 of the first 6 departments reject, picked at random. the supreme council always approves, so every request ends in a certificate.
+- **departments picked from the request:** each request goes to 5 to 7 departments.
+  - up to 3 topic departments, matched by keywords in the request. topics: school and homework, food, sleep, the body (blinking, breathing), moving around, work, money, feelings, phones and screens, drinks, talking, and not doing things.
+  - examples: "can i not submit my homework?" goes to the ministry of education-adjacent matters, the office of the dog that ate it, and the department of not doing things. snack oversight only shows up for food.
+  - 1 department invented from the request's main word, e.g. "standing committee on homework" or "office of chip affairs".
+  - general bureaucracy fills the remaining seats (preliminary paperwork, forms about forms, committee for committees, procedural delays, and more).
+  - the supreme council of final stamps always goes last.
+- **random judging:** each department decides independently, with about a 60% chance of rejection. at least one always says no.
+- **the final council can refuse:** about 1 in 4 requests is refused outright, and you get a notice of refusal instead of a certificate.
 
 ## animated scene
 
@@ -26,19 +25,7 @@ a pixel-art bureaucracy simulator for the stupid ideas hackathon (ottawa). submi
 
 ## jokes
 
-- **request-aware rejections:** if the request mentions certain topics, a matching rejection line replaces a generic one. topics covered:
-  - blinking or eyes
-  - snacks and food
-  - sleep
-  - standing, sitting and walking
-  - breathing
-  - crying and feelings
-  - dancing and running
-  - talking
-  - phones and the internet
-  - coffee, tea and water
-  - thinking and remembering
-- **request echoed back:** some lines include the user's own request, such as `"{req}" gave the committee a bad feeling.`
+- **request-aware lines:** every department has its own rejection and approval lines, and many include the request or its main word.
 
 ## certificate
 
