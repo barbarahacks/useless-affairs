@@ -16,14 +16,14 @@ what we are doing on department of useless affairs (stupid ideas hackathon, otta
 - [x] random judging, and the final council can refuse with a notice of refusal (#5)
 - [x] wider then slightly narrower main content, stickers kept off the screen edge (#6, #8)
 - [x] sound fixed and redone as office sounds, on/off cuts playing sounds (#11)
-- [x] `README.md` with the codex slideshow brief
+- [x] codex slideshow brief (below)
 
 ## next up
 
 - [ ] pick which stupid features to build (see ideas)
 - [ ] deploy (github pages or netlify) and make the repo public for judging
 - [ ] mobile check in a real browser
-- [ ] slideshow via codex, using real app screenshots
+- [ ] slideshow via codex, using real app screenshots (see codex brief)
 
 ## later: wire claude
 
@@ -47,6 +47,57 @@ what we are doing on department of useless affairs (stupid ideas hackathon, otta
 - **satisfaction survey:** any star rating is "rounded to 2.1. thank you."
 - **stamp cursor:** click anywhere on the site to stamp "rejected" on the page itself.
 - **permits wallet:** your certificates are kept on the device. all of them have expired.
+
+## codex brief: pitch slideshow
+
+**task:** build a short pitch slideshow (8 to 10 slides) for this project, to present at the hackathon. use ai-generated images for the visuals.
+
+**the joke the slideshow plays:** the pitch is delivered completely straight, as if this were a serious government service. the deadpan is the comedy. the product is silly, and the deck should not be.
+
+### visual style
+
+- **photos look real.** generate photorealistic, slightly dull, fluorescent-lit government office photography: beige cubicles, filing cabinets, stacks of forms, wall clocks, laminated signs, rubber stamps, paper trays, water-cooler corners. think "stock photo of a municipal office," shot on a mid-range camera, flat lighting, slightly desaturated. no fantasy, no cartoon look, no obvious ai gloss.
+- **match the app.** the app looks like a dull government website (cream grainy background, navy, manila folders, stamp red) with a small pixel-art office in the middle. use real app screenshots next to the photos, so the tiny pixel clerks against real office photos is part of the joke.
+- **palette:** cream `#f5efe1`, paper `#fdfaf2`, navy `#1c2b4a`, manila `#e9d8a6`, stamp red `#c8312f`, approved green `#2e7d4f`, ink `#1f2430`.
+- **type:** ibm plex serif for titles, ibm plex sans for body text, ibm plex mono for labels and case numbers.
+- **layout:** one idea per slide, a large image, and at most two short lines of text, all lowercase to match the app. no bullet walls.
+- **image consistency:** keep the same office, lighting and colour grade across all generated images so they feel like one photo shoot. reuse one base prompt and vary only the subject.
+
+### suggested slides
+
+1. **title:** "department of useless affairs." image: the exterior of a drab government building with a small sign. subtitle: "a service nobody asked for."
+2. **the problem:** "citizens are doing things without permission." image: a person blinking at a desk, looking unsure. line: "every day, millions of people blink. unsupervised."
+3. **the solution:** "every request gets its own departments. most say no." image: a corridor of identical numbered office doors.
+4. **meet the departments:** one office photo with seven small labelled callouts. show that they change per request, e.g. "can i not submit my homework?" goes to the office of the dog that ate it and the department of not doing things.
+5. **live demo:** a real screenshot of the app mid-request. cut to the app live here.
+6. **the certificate:** a photo of a framed certificate on an office wall, with the app's real certificate beside it. line: "valid for 4 minutes. void if enjoyed."
+7. **how it works (briefly):** "ai reads your request and assembles the departments most likely to say no. zero dependencies. zero purpose." image: a server room or a filing cabinet labelled "ai."
+8. **testimonials (fake, clearly absurd):** "i blinked with permission for the first time." a stock-photo-style portrait of a smiling office worker. label them as fictional in small print.
+9. **roadmap:** "q1: reject you twice. q2: a form for the form." image: a very tall stack of paper.
+10. **thank you:** "your request has been received. please wait 6 to 8 business years." image: an empty waiting room with a ticket dispenser.
+
+### image generation prompts
+
+use this base for every photo and swap in the subject:
+
+> photorealistic photo of {subject}, inside a drab municipal government office, fluorescent ceiling lighting, beige walls, slightly desaturated colour grade, shot on a mid-range dslr, 35mm, shallow depth of field, mundane and bureaucratic mood, no text unless specified, no people unless specified.
+
+example subjects:
+
+- a long corridor with seven identical numbered office doors
+- a desk with a rubber stamp, an ink pad and a tall stack of forms
+- a wall clock above a filing cabinet, with a handwritten "back in 5 min" note
+- a laminated sign reading "please take a number" next to a ticket dispenser
+- a framed certificate on a beige wall beside a dying office plant
+- an empty waiting room with plastic chairs bolted together
+
+### rules
+
+- do not use real logos, real government crests or seals, or real people's likenesses. invent a generic crest if one is needed.
+- label the testimonial people as fictional.
+- keep the deck readable on a projector: large type, high contrast.
+- deliver as a self-contained deck (html or pptx) with images in an `assets/` folder, plus the list of prompts used for each image.
+- take app screenshots from the running app using `?fast&req=...` rather than mocking them up.
 
 ## notes
 
