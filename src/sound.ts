@@ -179,8 +179,16 @@ export const sound = {
       }), 60);
     });
   },
-  stopSpeaking(): void {
-    synth?.cancel();
+  // says a line right away, inside the tap that started the case. on iphones speech only works after a real
+  // line has been spoken during a tap, so this unlocks the voices for every department after it
+  speakNow(text: string): void {
+    if (!synth || muted || FAST) return;
+    synth.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    const v = voiceFor('en');
+    if (v) u.voice = v;
+    u.lang = v?.lang ?? 'en-US';
+    synth.speak(u);
   },
   // wake the audio context on the first click or key press
   // phones only allow speech that starts inside a tap: speaking a silent line on the first tap unlocks it for the visit

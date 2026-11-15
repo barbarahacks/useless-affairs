@@ -125,7 +125,7 @@ async function run(request: string): Promise<void> {
   busy = true;
   go.disabled = true;
   cert.classList.add('hidden');
-  sound.stopSpeaking();
+  // (speech from an earlier case is cut off by sound.speakNow in the tap that started this one)
   // fines for the request itself
   if (request.includes('?')) fine('unauthorised question mark', 3.5);
   const caps = (request.match(/[A-Z]/g) ?? []).length;
@@ -242,6 +242,7 @@ clearHintOnInput(input, reqHint);
 form.addEventListener('submit', (e) => {
   e.preventDefault();
   if (busy || nudgeIfEmpty(input, reqHint)) return;
+  sound.speakNow('request received.');
   void run(input.value);
 });
 
@@ -268,6 +269,7 @@ for (const e of EXAMPLES) {
   b.addEventListener('click', () => {
     if (busy) return;
     fine('plagiarising a frequently requested request', 5);
+    sound.speakNow('request received.');
     input.value = e;
     void run(e);
   });
