@@ -26,7 +26,6 @@ what we are doing on department of useless affairs (stupid ideas hackathon, otta
   - [x] ottawa news ticker (#17)
   - [x] voices read the verdicts: 4 languages, an alien, clear english, a singing council (#18)
   - [x] fines (#20)
-  - [ ] clerk sneeze (#23)
   - [ ] follow-up question (#25)
 - [ ] deploy (github pages or netlify) and make the repo public for judging
 - [ ] mobile check in a real browser
@@ -76,7 +75,6 @@ what we are doing on department of useless affairs (stupid ideas hackathon, otta
 - **o-train delay:** sometimes processing stops: "your request is delayed. it was sent on the o-train."
 - **fines:** you get fined for things as you use the site. typing too fast, hovering too long, using a question mark. they are added to the processing fee.
 - **come back:** when you switch tabs, the tab title becomes "your case is unattended" and the icon becomes a red stamp.
-- **clerk sneeze:** a clerk sneezes and the paper blows back one desk.
 - **follow-up question:** a department asks "why do you need to blink?". any answer is "insufficient". good for the claude version later.
 - **2fa:** "we've sent a verification code to your fax machine."
 - **draft autosave:** "draft saved", then a second later "draft rejected".
