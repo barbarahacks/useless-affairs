@@ -16,6 +16,7 @@ what we are doing on department of useless affairs (stupid ideas hackathon, otta
 - [x] random judging, and the final council can refuse with a notice of refusal (#5)
 - [x] wider then slightly narrower main content, stickers kept off the screen edge (#6, #8)
 - [x] sound fixed and redone as office sounds, on/off cuts playing sounds (#11)
+- [x] stamp after the verdict is read, sound on impact (#26)
 - [x] codex slideshow brief (below)
 - [x] README.md, short like pepguard
 
