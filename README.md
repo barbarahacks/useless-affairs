@@ -11,7 +11,7 @@ each department stamps it `approved` or `rejected` on its own. the council's sta
 
 ## docs
 
-- `FEATURES.md`: what we are working on, ideas, and the codex slideshow brief
+- `FEATURES.md`: what we are working on and ideas
 
 ## setup
 
