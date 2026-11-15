@@ -17,7 +17,7 @@ what we are doing on department of useless affairs (stupid ideas hackathon, otta
   - [x] voices read the verdicts: 4 languages, an alien, clear english, a singing council (#18)
   - [x] fines (#20)
   - [x] follow-up question (#25)
-- [ ] deploy on netlify (#30): connect the repo, set ANTHROPIC_API_KEY
+- [x] deployed on netlify, with claude: https://useless-affairs.netlify.app (#30)
 - [ ] mobile check in a real browser
 
 ## claude (#29)

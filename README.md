@@ -2,6 +2,8 @@
 
 a government portal that processes your most pointless requests (stupideas ottawa, ai track).
 
+live: https://useless-affairs.netlify.app
+
 type a request like "can i blink?" and claude invents 6 departments for it, each with its own rejection and approval line, plus a follow-up question one of them asks you. the supreme council of final stamps always goes last.
 
 each department stamps it `approved` or `rejected` on its own. the council's stamp decides what you leave with: a certificate of provisional permission or a notice of refusal.
