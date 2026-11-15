@@ -1,6 +1,7 @@
 import './style.css';
 import { FAST } from './config.ts';
 import { Scene } from './scene.ts';
+import { sound } from './sound.ts';
 import { EXAMPLES, buildCase } from './departments.ts';
 import type { Case, Outcome } from './departments.ts';
 
@@ -21,24 +22,7 @@ const caseNo = $('case-no');
 const bar = $('progress-bar');
 let busy = false;
 
-// tiny webaudio blips, no assets needed
-let muted = false;
-let ac: AudioContext | undefined;
-function blip(freq: number, ms = 40, type: OscillatorType = 'square', vol = 0.04): void {
-  if (muted || FAST) return;
-  ac ??= new AudioContext();
-  const o = ac.createOscillator();
-  const g = ac.createGain();
-  o.type = type;
-  o.frequency.value = freq;
-  g.gain.value = vol;
-  g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + ms / 1000);
-  o.connect(g).connect(ac.destination);
-  o.start();
-  o.stop(ac.currentTime + ms / 1000);
-}
-const sadTrombone = (): void => [392, 370, 349, 311].forEach((f, i) => setTimeout(() => blip(f, i === 3 ? 600 : 260, 'sawtooth', 0.05), i * 300));
-const jingle = (): void => [523, 659, 784, 1047].forEach((f, i) => setTimeout(() => blip(f, 160, 'triangle', 0.08), i * 120));
+sound.unlockOnGesture();
 
 // typewriter; a newer message cancels an older one mid-sentence
 let sayToken = 0;
@@ -50,10 +34,11 @@ async function say(name: string, text: string): Promise<void> {
     said.textContent = text;
     return;
   }
+  let n = 0;
   for (const ch of text) {
     if (token !== sayToken) return;
     said.textContent += ch;
-    if (ch !== ' ') blip(300 + Math.random() * 120, 25);
+    if (ch !== ' ' && n++ % 2 === 0) sound.key();
     await sleep(14);
   }
 }
@@ -147,7 +132,7 @@ async function run(request: string): Promise<void> {
     setStep(i, 'review');
     await scene.moveTo(i);
     await scene.stamp(i, v.outcome);
-    blip(v.outcome === 'approved' ? 880 : 140, 200, v.outcome === 'approved' ? 'triangle' : 'sawtooth', 0.08);
+    sound.stamp(v.outcome === 'approved');
     setStep(i, v.outcome, v.reason);
     bar.style.width = `${((i + 1) / c.depts.length) * 100}%`;
     await say(c.depts[i].name, `${v.outcome}. ${v.reason}`);
@@ -155,8 +140,8 @@ async function run(request: string): Promise<void> {
   }
 
   await say('reception', c.granted ? 'processing complete. your certificate has been issued.' : 'processing complete. your request has been refused. a notice has been issued.');
-  if (c.granted) jingle();
-  else sadTrombone();
+  if (c.granted) sound.fanfare();
+  else sound.trombone();
   await scene.celebrate();
   cert.innerHTML = certificate(request.trim(), c, no, date);
   cert.classList.remove('hidden');
@@ -186,8 +171,9 @@ form.addEventListener('submit', (e) => {
 
 const mute = $('mute');
 mute.addEventListener('click', () => {
-  muted = !muted;
-  mute.textContent = muted ? 'sound: off' : 'sound: on';
+  sound.setMuted(!sound.muted);
+  mute.textContent = sound.muted ? 'sound: off' : 'sound: on';
+  mute.setAttribute('aria-pressed', String(!sound.muted));
 });
 
 // the nav goes nowhere, officially
