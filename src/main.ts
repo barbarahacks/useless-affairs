@@ -131,12 +131,15 @@ async function run(request: string): Promise<void> {
     const v = c.verdicts[i];
     setStep(i, 'review');
     await scene.moveTo(i);
-    await scene.stamp(i, v.outcome);
-    sound.stamp(v.outcome === 'approved');
-    setStep(i, v.outcome, v.reason);
-    bar.style.width = `${((i + 1) / c.depts.length) * 100}%`;
+    // read the verdict first, then stamp it
     await say(c.depts[i].name, `${v.outcome}. ${v.reason}`);
-    await sleep(700);
+    await sleep(250);
+    await scene.stamp(i, v.outcome, () => {
+      sound.stamp(v.outcome === 'approved');
+      setStep(i, v.outcome, v.reason);
+      bar.style.width = `${((i + 1) / c.depts.length) * 100}%`;
+    });
+    await sleep(600);
   }
 
   await say('reception', c.granted ? 'processing complete. your certificate has been issued.' : 'processing complete. your request has been refused. a notice has been issued.');

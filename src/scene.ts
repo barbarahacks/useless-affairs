@@ -100,11 +100,13 @@ export class Scene {
     this.paper.y = PAPER_Y;
   }
 
-  async stamp(i: number, outcome: Outcome): Promise<void> {
+  // onImpact runs the moment the stamp hits the paper
+  async stamp(i: number, outcome: Outcome, onImpact?: () => void): Promise<void> {
     this.hand.x = this.stationX(i) + 4 - 8;
     await tween(260, (t) => (this.hand.y = HAND_UP + (HAND_DOWN - HAND_UP) * t));
     this.paper.stamped = outcome;
     this.marks[i] = outcome;
+    onImpact?.();
     await tween(160, () => undefined);
     await tween(260, (t) => (this.hand.y = HAND_DOWN + (HAND_UP - HAND_DOWN) * t));
   }
