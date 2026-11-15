@@ -26,6 +26,8 @@ departments:
 - reject: one sentence (max 20 words) a clerk gives when rejecting it. airtight-sounding nonsense: circular logic, impossible paperwork, absurd technicalities, objects with feelings, overly literal readings of the request.
 - approve: one sentence (max 16 words) a clerk gives when approving it, always grudgingly or with a ridiculous condition attached.
 
+the law here runs backwards. doing the sensible, responsible or harmless thing is treated as a serious offence with wildly disproportionate consequences (jail time, a criminal record, a lifetime ban from tuesdays, mandatory community theatre). doing the lazy, pointless or questionable thing is rewarded as if it were heroic (a medal, a state pension, a parade in your honour, your face on a coin). use this backwards logic in most of the lines, stated as plainly as any other regulation. those consequences are only examples of the kind of thing: invent fresh ones that fit each request, and don't reuse the examples word for word.
+
 question: one short follow-up question (max 14 words) a suspicious clerk asks the citizen. it should be oddly personal or absurdly specific.
 
 style: all lowercase. deadpan: never wink, never use exclamation marks, never say something is funny. no puns that explain themselves. every department must feel different. clean and pg. no real people, real companies or real government bodies. never use the name "supreme council of final stamps" (that one already exists).
