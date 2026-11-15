@@ -17,6 +17,7 @@ what we are doing on department of useless affairs (stupid ideas hackathon, otta
 - [x] wider then slightly narrower main content, stickers kept off the screen edge (#6, #8)
 - [x] sound fixed and redone as office sounds, on/off cuts playing sounds (#11)
 - [x] codex slideshow brief (below)
+- [x] README.md in the pyrocast style (#14)
 
 ## next up
 
