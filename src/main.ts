@@ -118,7 +118,9 @@ async function run(request: string): Promise<void> {
   busy = true;
   go.disabled = true;
   cert.classList.add('hidden');
+  sound.stopSpeaking();
   const c = buildCase(request);
+  sound.newCast(c.depts.length, c.granted);
   scene.reset(c.depts.length);
   openCaseFile(c);
 
@@ -133,8 +135,11 @@ async function run(request: string): Promise<void> {
     const v = c.verdicts[i];
     setStep(i, 'review');
     await scene.moveTo(i);
-    // read the verdict first, then stamp it
-    await say(c.depts[i].name, `${v.outcome}. ${v.reason}`);
+    // read the verdict first (typed and spoken), then stamp it
+    const line = `${v.outcome}. ${v.reason}`;
+    const lang = sound.languageOf(i);
+    const from = lang ? `${c.depts[i].name} · in ${lang} (subtitled)` : c.depts[i].name;
+    await Promise.all([say(from, line), sound.speak(sound.spokenLine(i, c.depts[i].name, v.outcome, line), i)]);
     await sleep(250);
     await scene.stamp(i, v.outcome, () => {
       sound.stamp(v.outcome === 'approved');
@@ -152,6 +157,9 @@ async function run(request: string): Promise<void> {
   cert.innerHTML = certificate(request.trim(), c, no, date);
   cert.classList.remove('hidden');
   cert.scrollIntoView({ behavior: FAST ? 'auto' : 'smooth', block: 'center' });
+
+  // the stamp slams down with a css animation; play the sound the moment it lands
+  cert.querySelector('.cert-stamp')?.addEventListener('animationend', () => sound.bigStamp(c.granted), { once: true });
 
   const share = $('share');
   share.addEventListener('click', () => {
